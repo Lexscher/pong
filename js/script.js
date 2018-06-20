@@ -16,7 +16,7 @@ let paddle2Y = 250;
 // The player's scores.
 let player1Score = 0;
 let player2Score = 0;
-const WINNING_SCORE = 3;
+const WINNING_SCORE = 5;
 
 // initial state of our "win screen".
 let showingWinScreen = false;
@@ -92,7 +92,7 @@ let computerMovement = () => {
 // This handles all the movement/functionality of the items in our canvas.
 moveEverything = () => {
   if (showingWinScreen) {
-    canvasContext.fillStyle = "#FFF";
+    canvasContext.fillStyle = "#eaeaff";
     canvasContext.fillText("click to continue", 100, 100);
     return;
   }
@@ -131,12 +131,19 @@ moveEverything = () => {
   }
 }; // <~ Move Everything Function: closed.
 
+// Make a handsome net for our game.
+drawNet = () => {
+  for (let i = 0; i < canvas.height; i += 40) {
+    colorRect(canvas.width / 2 - 1, i, 2, 20, "#eaeaff");
+  }
+};
+
 // This draws all the shapes/items on our canvas.
 drawEverything = () => {
   // Background of our canvas.
-  colorRect(0, 0, canvas.width, canvas.height, "#000");
+  colorRect(0, 0, canvas.width, canvas.height, "#004444");
   if (showingWinScreen) {
-    canvasContext.fillStyle = "#FFF";
+    canvasContext.fillStyle = "#eaeaff";
     // Declare who our winner is.
     if (player1Score >= WINNING_SCORE) {
       canvasContext.fillText("WINNER: human.", 350, 200);
@@ -146,18 +153,21 @@ drawEverything = () => {
     canvasContext.fillText("click to continue", 350, 500);
     return;
   } // <~ showingWinScreen If Statement: closed.
+
+  drawNet();
+
   // Left paddle (Player's paddle).
-  colorRect(0, paddle1Y, PADDLE_THICKNESS, PADDLE_HEIGHT, "#FFF");
+  colorRect(0, paddle1Y, PADDLE_THICKNESS, PADDLE_HEIGHT, "#eaeaff");
   // Right computer paddle.
   colorRect(
     canvas.width - PADDLE_THICKNESS,
     paddle2Y,
     PADDLE_THICKNESS,
     PADDLE_HEIGHT,
-    "#FFF"
+    "#eaeaff"
   );
   // Draws the ball.
-  colorCircle(ballX, ballY, 10, "#FFF");
+  colorCircle(ballX, ballY, 10, "#eaeaff");
 
   // Display Scores!!
   canvasContext.fillText("player: " + player1Score, 50, 50);
