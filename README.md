@@ -1,6 +1,9 @@
 # Pong
 
-I'm following a [Udemy Course](https://www.udemy.com/code-your-first-game/) to make a game and learn some cool stuff!
+I'm followed a [Udemy Course](https://www.udemy.com/code-your-first-game/) to make a game and learn some cool stuff!
+
+Here's what it looks like:
+![pong image](https://github.com/Lexscher/pong/blob/master/images/Pong.png)
 
 I believe I'll be making that cool vintage game, pong.
 
