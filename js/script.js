@@ -13,9 +13,12 @@ const PADDLE_HEIGHT = 100;
 let paddle1Y = 250;
 let paddle2Y = 250;
 
-// The players.
+// The player's scores.
 let player1Score = 0;
 let player2Score = 0;
+const WINNING_SCORE = 3;
+
+let showingWinScreen = false;
 
 // Identify the location of the user's mouse.
 // This event listener fires every time the mouse is moved.
@@ -52,6 +55,13 @@ window.onload = () => {
 
 // Reset the position of the ball to the center of the screen.
 ballReset = () => {
+  // Check for win state.
+  if (player1Score >= WINNING_SCORE || player2Score >= WINNING_SCORE) {
+    player1Score = 0;
+    player2Score = 0;
+    showingWinScreen = true;
+  }
+
   ballSpeedX = -ballSpeedX;
   ballX = canvas.width / 2;
   ballX = canvas.height / 2;
@@ -70,6 +80,11 @@ let computerMovement = () => {
 
 // This handles all the movement/functionality of the items in our canvas.
 moveEverything = () => {
+  if (showingWinScreen) {
+    canvasContext.fillStyle = "#FFF";
+    canvasContext.fillText("click to continue", 100, 100);
+    return;
+  }
   computerMovement();
 
   ballX += ballSpeedX;
@@ -78,22 +93,23 @@ moveEverything = () => {
   if (ballX < 0) {
     if (ballY > paddle1Y && ballY < paddle1Y + PADDLE_HEIGHT) {
       ballSpeedX = -ballSpeedX;
-
+      // Ball control.
       let deltaY = ballY - (paddle1Y + PADDLE_HEIGHT / 2);
       ballSpeedY = deltaY * 0.35;
     } else {
+      player2Score++; // Must be BEFORE ballReset().
       ballReset();
-      player2Score++;
     }
   }
   if (ballX > canvas.width) {
     if (ballY > paddle2Y && ballY < paddle2Y + PADDLE_HEIGHT) {
       ballSpeedX = -ballSpeedX;
+      // Ball control.
       let deltaY = ballY - (paddle2Y + PADDLE_HEIGHT / 2);
       ballSpeedY = deltaY * 0.35;
     } else {
-      ballReset();
       player1Score++;
+      ballReset();
     }
   }
   if (ballY < 0) {
@@ -109,6 +125,11 @@ drawEverything = () => {
   // Background of our canvas.
   colorRect(0, 0, canvas.width, canvas.height, "#000");
   // Left paddle (Player's paddle).
+  if (showingWinScreen) {
+    canvasContext.fillStyle = "#FFF";
+    canvasContext.fillText("click to continue", 100, 100);
+    return;
+  }
   colorRect(0, paddle1Y, PADDLE_THICKNESS, PADDLE_HEIGHT, "#FFF");
   // Right computer paddle.
   colorRect(
