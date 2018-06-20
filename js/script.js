@@ -5,9 +5,11 @@ let ballX = 50;
 let ballSpeedX = 15;
 let ballY = 10;
 let ballSpeedY = 4;
-// Control the paddle.
+// The paddles.
+const PADDLE_THICKNESS = 10;
 const PADDLE_HEIGHT = 100;
 let paddle1Y = 250;
+let paddle2Y = 250;
 
 // Identify the location of the user's mouse.
 // This event listener fires every time the mouse is moved.
@@ -41,14 +43,37 @@ window.onload = () => {
     paddle1Y = mousePos.y - PADDLE_HEIGHT / 2;
   });
 };
+
+// Reset the position of the ball to the center of the screen.
+ballReset = () => {
+  ballSpeedX = -ballSpeedX;
+  ballX = canvas.width / 2;
+  ballX = canvas.height / 2;
+};
+
 // This handles all the movement/functionality of the items in our canvas.
 moveEverything = () => {
   ballX += ballSpeedX;
   ballY += ballSpeedY;
-  if (ballX > canvas.width || ballX < 0) {
-    ballSpeedX = -ballSpeedX;
+  if (ballX < 0) {
+    // ballSpeedX = -ballSpeedX;
+    if (ballY > paddle1Y && ballY < paddle1Y + PADDLE_HEIGHT) {
+      ballSpeedX = -ballSpeedX;
+    } else {
+      ballReset();
+    }
   }
-  if (ballY > canvas.height || ballY < 0) {
+  if (ballX > canvas.width) {
+    if (ballY > paddle2Y && ballY < paddle2Y + PADDLE_HEIGHT) {
+      ballSpeedX = -ballSpeedX;
+    } else {
+      ballReset();
+    }
+  }
+  if (ballY < 0) {
+    ballSpeedY = -ballSpeedY;
+  }
+  if (ballY > canvas.height) {
     ballSpeedY = -ballSpeedY;
   }
 };
@@ -56,8 +81,16 @@ moveEverything = () => {
 drawEverything = () => {
   // Background of our canvas.
   colorRect(0, 0, canvas.width, canvas.height, "#000");
-  // Left player's paddle.
-  colorRect(0, paddle1Y, 10, PADDLE_HEIGHT, "#FFF");
+  // Left paddle (Player's paddle).
+  colorRect(0, paddle1Y, PADDLE_THICKNESS, PADDLE_HEIGHT, "#FFF");
+  // Right computer paddle.
+  colorRect(
+    canvas.width - PADDLE_THICKNESS,
+    paddle2Y,
+    PADDLE_THICKNESS,
+    PADDLE_HEIGHT,
+    "#FFF"
+  );
   // Draws the ball.
   colorCircle(ballX, ballY, 10, "#FFF");
 };
