@@ -18,6 +18,7 @@ let player1Score = 0;
 let player2Score = 0;
 const WINNING_SCORE = 3;
 
+// initial state of our "win screen".
 let showingWinScreen = false;
 
 // Identify the location of the user's mouse.
@@ -33,6 +34,14 @@ calculateMousePos = evt => {
   };
 };
 
+let handleMouseClick = evt => {
+  if (showingWinScreen) {
+    player1Score = 0;
+    player2Score = 0;
+    showingWinScreen = false;
+  }
+};
+
 window.onload = () => {
   console.log("Within Your Browser, The Force Has Awakened...");
   // Grab the canvas we will be painting.
@@ -45,6 +54,9 @@ window.onload = () => {
     moveEverything();
     drawEverything();
   }, 1000 / framesPerSecond);
+
+  // Add the event listener to restart the game.
+  canvas.addEventListener("mousedown", handleMouseClick);
 
   // Add the event listener to our canvas.
   canvas.addEventListener("mousemove", function(evt) {
