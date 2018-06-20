@@ -34,6 +34,7 @@ calculateMousePos = evt => {
   };
 };
 
+// This allows us to reset the game when we've hit the win state.
 let handleMouseClick = evt => {
   if (showingWinScreen) {
     player1Score = 0;
@@ -69,8 +70,6 @@ window.onload = () => {
 ballReset = () => {
   // Check for win state.
   if (player1Score >= WINNING_SCORE || player2Score >= WINNING_SCORE) {
-    player1Score = 0;
-    player2Score = 0;
     showingWinScreen = true;
   }
 
@@ -136,12 +135,18 @@ moveEverything = () => {
 drawEverything = () => {
   // Background of our canvas.
   colorRect(0, 0, canvas.width, canvas.height, "#000");
-  // Left paddle (Player's paddle).
   if (showingWinScreen) {
     canvasContext.fillStyle = "#FFF";
-    canvasContext.fillText("click to continue", 100, 100);
+    // Declare who our winner is.
+    if (player1Score >= WINNING_SCORE) {
+      canvasContext.fillText("WINNER: human.", 350, 200);
+    } else if (player2Score >= WINNING_SCORE) {
+      canvasContext.fillText("WINNER: THE COMPUTER!!", 350, 200);
+    }
+    canvasContext.fillText("click to continue", 350, 500);
     return;
-  }
+  } // <~ showingWinScreen If Statement: closed.
+  // Left paddle (Player's paddle).
   colorRect(0, paddle1Y, PADDLE_THICKNESS, PADDLE_HEIGHT, "#FFF");
   // Right computer paddle.
   colorRect(
